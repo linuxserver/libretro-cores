@@ -1,0 +1,29 @@
+# Notes
+
+Compiled inside `git.libretro.com:5050/libretro-infrastructure/libretro-build-emscripten:latest` container, general steps: 
+
+Clone code for libretro emu:
+```
+git clone https://github.com/libretro/stella2014-libretro.git
+```
+
+Compile bc file:
+```
+emmake make -f Makefile platform=emscripten
+```
+
+Grab pre-compiled libretro emscripten: (example old assets)
+```
+wget "https://git.libretro.com/libretro/RetroArch/-/jobs/1110508/artifacts/download?file_type=archive" -O precompiled.zip
+```
+
+Copy bc file to precompiled source as `libretro_emscripten.bc` and compile with: 
+```
+emmake make -f Makefile.emscripten -j$NUMPROC LIBRETRO=stella2014
+```
+
+### Virtual Jaguar
+```
+add STATIC_LINKING=1 to makefile
+LDFLAGS="$CFLAGS -s TOTAL_MEMORY=33554432" emmake make -f Makefile platform=emscripten
+```
