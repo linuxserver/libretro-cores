@@ -27,3 +27,19 @@ emmake make -f Makefile.emscripten -j$NUMPROC LIBRETRO=stella2014
 add STATIC_LINKING=1 to makefile
 LDFLAGS="$CFLAGS -s TOTAL_MEMORY=33554432" emmake make -f Makefile platform=emscripten
 ```
+
+### beetle-pce-fast
+
+Built at commit 1efc0309b65ce77ad5121a6c5f329ad9e26a6ded before breaking filestream changes. Slight makefile tweaks for static chd support: 
+
+```
+# Emscripten
+else ifeq ($(platform), emscripten)
+   TARGET := $(TARGET_NAME)_libretro_$(platform).bc
+   fpic    := -fPIC
+   SHARED  := -shared -Wl,--no-undefined -Wl,--version-script=link.T
+   HAVE_CHD = 1
+   HAVE_CDROM = 0
+   HAVE_NEON = 0
+   STATIC_LINKING = 1
+```
