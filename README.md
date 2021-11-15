@@ -43,3 +43,12 @@ else ifeq ($(platform), emscripten)
    HAVE_NEON = 0
    STATIC_LINKING = 1
 ```
+
+### melonds
+```
+else ifeq ($(platform), emscripten)
+   TARGET := $(TARGET_NAME)_libretro_emscripten.bc
+   fpic := -fPIC
+   SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
+```
+
