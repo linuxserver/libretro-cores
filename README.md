@@ -52,3 +52,16 @@ else ifeq ($(platform), emscripten)
    SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
 ```
 
+### Yabause
+
+```
+# Emscripten
+else ifeq ($(platform), emscripten)
+        TARGET := $(TARGET_NAME)_libretro_$(platform).bc
+        STATIC_LINKING = 1
+        HAVE_THREADS = 0
+        HAVE_SSE = 0
+        fpic := -fPIC
+        SHARED := -shared -Wl,--no-undefined -Wl,--version-script=link.T
+        HAVE_CDROM = 0
+```
