@@ -65,3 +65,21 @@ else ifeq ($(platform), emscripten)
         SHARED := -shared -Wl,--no-undefined -Wl,--version-script=link.T
         HAVE_CDROM = 0
 ```
+
+### beetle psx
+
+Forked here [https://github.com/thelamer/beetle-psx-libretro](https://github.com/thelamer/beetle-psx-libretro)
+
+### 81 and fuse
+
+Slight makefile tweaks
+
+```
+# emscripten
+else ifeq ($(platform), emscripten)
+        TARGET := $(TARGET_NAME)_libretro_$(platform).bc
+        fpic    := -fPIC
+        SHARED  := -shared -Wl,--no-undefined -Wl,--version-script=link.T
+        HAVE_NEON = 0
+        STATIC_LINKING = 1
+```
