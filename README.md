@@ -51,6 +51,7 @@ else ifeq ($(platform), emscripten)
    fpic := -fPIC
    SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
 ```
+Also need to swap the static linking include in Makefile.common
 
 ### Yabause
 
