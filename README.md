@@ -1,86 +1,44 @@
 # Notes
 
-Compiled inside `git.libretro.com:5050/libretro-infrastructure/libretro-build-emscripten:latest` container, general steps: 
+All forked code is here: 
 
-Clone code for libretro emu:
+[https://github.com/thelamer/retrostash](https://github.com/thelamer/retrostash)
+
+We build these cores using emsdk 1.39.5.
+
+## Basic build instructions
+
 ```
-git clone https://github.com/libretro/stella2014-libretro.git
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk
+./emsdk install 1.39.5
+./emsdk activate 1.39.5
+Follow instructions for sourcing paths to shell
+
+git clone https://github.com/thelamer/retrostash.git
+cd retrostash/libretro-fceumm
+emmake make -f Makefile -j6 platform=emscripten
+cd ../Retroarch/dist-scripts
+cp ../../libretro-fceumm/fceumm_libretro_emscripten.bc .
+emmake ./dist-cores.sh emscripten
 ```
 
-Compile bc file:
-```
-emmake make -f Makefile platform=emscripten
-```
+Resulting build output will be in `../pkg/emscripten`.
+After these files are built run the following command to utilize the pre-initiated audio context used by libretrojs: (needed for safari compatibility)
 
-Grab pre-compiled libretro emscripten: (example old assets)
 ```
-wget "https://git.libretro.com/libretro/RetroArch/-/jobs/1110508/artifacts/download?file_type=archive" -O precompiled.zip
-```
-
-Copy bc file to precompiled source as `libretro_emscripten.bc` and compile with: 
-```
-emmake make -f Makefile.emscripten -j$NUMPROC LIBRETRO=stella2014
-```
-
-### Virtual Jaguar
-```
-add STATIC_LINKING=1 to makefile
-LDFLAGS="$CFLAGS -s TOTAL_MEMORY=33554432" emmake make -f Makefile platform=emscripten
+sed -i 's/context:undefined/context:readyAudioContext/g'
 ```
 
 ### beetle-pce-fast
 
 Built at commit 1efc0309b65ce77ad5121a6c5f329ad9e26a6ded before breaking filestream changes. Slight makefile tweaks for static chd support: 
 
-```
-# Emscripten
-else ifeq ($(platform), emscripten)
-   TARGET := $(TARGET_NAME)_libretro_$(platform).bc
-   fpic    := -fPIC
-   SHARED  := -shared -Wl,--no-undefined -Wl,--version-script=link.T
-   HAVE_CHD = 1
-   HAVE_CDROM = 0
-   HAVE_NEON = 0
-   STATIC_LINKING = 1
-```
-
 ### melonds
-```
-else ifeq ($(platform), emscripten)
-   TARGET := $(TARGET_NAME)_libretro_emscripten.bc
-   fpic := -fPIC
-   SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
-```
-Also need to swap the static linking include in Makefile.common
-
-### Yabause
-
-```
-# Emscripten
-else ifeq ($(platform), emscripten)
-        TARGET := $(TARGET_NAME)_libretro_$(platform).bc
-        STATIC_LINKING = 1
-        HAVE_THREADS = 0
-        HAVE_SSE = 0
-        fpic := -fPIC
-        SHARED := -shared -Wl,--no-undefined -Wl,--version-script=link.T
-        HAVE_CDROM = 0
-```
+Need to swap the static linking include in Makefile.common
 
 ### beetle psx
 
-Forked here [https://github.com/thelamer/beetle-psx-libretro](https://github.com/thelamer/beetle-psx-libretro)
+Forked here also [https://github.com/thelamer/beetle-psx-libretro](https://github.com/thelamer/beetle-psx-libretro)
 
-### 81 and fuse
-
-Slight makefile tweaks
-
-```
-# emscripten
-else ifeq ($(platform), emscripten)
-        TARGET := $(TARGET_NAME)_libretro_$(platform).bc
-        fpic    := -fPIC
-        SHARED  := -shared -Wl,--no-undefined -Wl,--version-script=link.T
-        HAVE_NEON = 0
-        STATIC_LINKING = 1
-```
+Tweaks for memory limits.
