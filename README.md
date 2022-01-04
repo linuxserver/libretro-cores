@@ -30,6 +30,8 @@ After these files are built run the following command to utilize the pre-initiat
 sed -i 's/context:undefined/context:readyAudioContext/g'
 ```
 
+# Notes
+
 ### beetle-pce-fast
 
 Built at commit 1efc0309b65ce77ad5121a6c5f329ad9e26a6ded before breaking filestream changes. Slight makefile tweaks for static chd support: 
